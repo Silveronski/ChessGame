@@ -9,6 +9,7 @@ export const routes = app => {
     });
 
     app.get('/black', (req, res) => {
+        console.log(req);
         if (!games[req.query.code]) {
             return res.redirect('/?error=invalidCode');
         }
