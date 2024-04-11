@@ -3,6 +3,7 @@ import express from 'express';
 import handlebars from 'express-handlebars';
 import path from 'path';
 import myIo from './sockets/io.js';
+import cors from 'cors';
 import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
@@ -10,7 +11,14 @@ import { routes } from './routes/routes.js';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+app.use(cors());
+const io = new Server(server, {
+  cors: {
+    origin: "*",  
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 const PORT  = 3037;
 
 const __filename = fileURLToPath(import.meta.url);
