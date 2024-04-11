@@ -1,5 +1,9 @@
 {
     "version": 2,
     "builds": [{ "src": "./index.js", "use": "@vercel/node" }],
-    "routes": [{ "src": "/(.*)", "dest": "/" }, { "src": "/black?code=:code", "dest": "/black?code=:code" }]
+    "routes": [
+        { "src": "/:color", "dest": "/:color" },
+        { "src": "/:color?code=:code", "dest": "/:color?code=:code" },
+        { "src": "/(.*)", "dest": "/" }
+    ]
 }
