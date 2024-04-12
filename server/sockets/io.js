@@ -11,8 +11,6 @@ const myIo = (io) => {
         });
         
         socket.on('joinGame', function(data) {
-            console.log(data);
-            console.log(games);
             currentCode = data.code;
             socket.join(currentCode);
             if (!games[currentCode]) {

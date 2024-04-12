@@ -10,13 +10,11 @@ export const routes = app => {
 
     app.get('/black', (req, res) => {
         if (!games[req.query.code]) {
-            return res.redirect(`/?error=invalidCode ${JSON.stringify(games)}`);
+            return res.redirect('/?error=invalidCode');
         }
         
         res.render('game', {
-            color: 'black',
-            games: JSON.stringify(games),
-            req: JSON.stringify(req.query),
+            color: 'black'          
         });
     });
 };
