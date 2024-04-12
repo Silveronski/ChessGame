@@ -17,8 +17,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const publicPath = resolve(__dirname, '../client/public'); 
 
-server.listen(PORT);
-console.log(`Server listening on port ${PORT}`);
+server.listen(PORT || 8000);
+console.log(`Server listening on port ${PORT || 8000}`);
 
 export let games = {};
 
