@@ -31,7 +31,7 @@ body{
     border: 6px black solid;
     display: flex; 
     overflow: hidden; 
-    height: 85vh;
+    height: 40vw;
 }
 
 .left-container{
@@ -49,15 +49,15 @@ body{
 }
 
 .moves-container{
-    width: 400px;   
     height: calc(100% - 60px);
+    width: 400px;   
     border-right: 4px black solid;
     padding-right: 0.5%;
     padding-left: 0.5%;  
 }
 
 .scrollable{
-    height: 687px;
+    height: 685px;
     overflow-y: auto;
 }
 

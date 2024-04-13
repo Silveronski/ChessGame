@@ -18,6 +18,7 @@ let moveCount = 1;
 let turnCount = 0;
 let colorWhoResigned = '';
 let colorWhoRequestedDraw = '';
+let colorWhoRequestedRematch = '';
 
 function onDragStart (source, piece, position, orientation) {
     // do not pick up pieces if the game is over
@@ -81,7 +82,6 @@ function playGameSounds(game){
 // for castling, en passant, pawn promotion
 function onSnapEnd () {
     board.position(game.fen());
-    // $('#pgn').scrollTop($('#pgn').prop('scrollHeight'));
 }
 
 function updateStatus () {
@@ -168,6 +168,7 @@ if (urlParams.get('code')) {
 }
 
 socket.on('startGame', function() {
+    $rematchBtn.css('display', 'none');
     gameHasStarted = true;
     updateStatus();
 });
@@ -229,6 +230,7 @@ socket.on('draw', function() {
     $status.html(`Draw!`);
     $statusMob.html(`Draw!`);
     gameOver = true;
+    $rematchBtn.css('display', 'block');
     $drawSound.get(0).play();
 });
 
@@ -245,6 +247,7 @@ socket.on('resign', function() {
     } 
     colorWhoResigned = '';
     gameOver = true;
+    $rematchBtn.css('display', 'block');
 });
 
 
@@ -275,6 +278,83 @@ function handleDraw() {
     }
 }
 
+function handleRematch() {
+    if (gameOver) {
+        colorWhoRequestedRematch = playerColor;
+        socket.emit('rematchRequest');
+
+        toastr.success(
+            `A rematch offer was sent to your opponent`, 
+            "Rematch offer",
+            {
+                timeOut: 3000,
+                extendedTimeOut: 0, 
+                closeButton: true, 
+                positionClass: "toast-bottom-left", 
+                tapToDismiss: false,
+                preventDuplicates: true,              
+            }
+        );
+    }    
+}
+
+socket.on('rematchRequest', function() {
+    if (colorWhoRequestedRematch === '') {
+        toastr.info(
+            `Your opponent has offered a rematch`, 
+            "Rematch request",
+            {
+                timeOut: 10000,
+                extendedTimeOut: 0, 
+                progressBar: true,
+                closeButton: true, 
+                positionClass: "toast-bottom-left", 
+                tapToDismiss: false,
+                preventDuplicates: true,
+                closeHtml: `<button onclick="acceptRematch()">Accept</button>` +
+                            `<br />` +
+                            `<button onclick="rejectRemacth()">Reject</button>`
+            }
+        );
+    }
+});
+
+window.rejectRemacth = () => {
+    socket.emit('rematchReject');
+}
+
+window.acceptRematch = () => {
+    socket.emit('rematch');       
+}
+
+socket.on('rematchReject', function(){
+    if (colorWhoRequestedRematch !== '') {
+        colorWhoRequestedRematch = '';
+        toastr.error(
+            `Your opponent has declined your rematch offer`, 
+            "Rematch offer rejected",
+            {
+                timeOut: 3000,
+                extendedTimeOut: 0, 
+                closeButton: true, 
+                positionClass: "toast-bottom-left", 
+                tapToDismiss: false,
+                preventDuplicates: true,              
+            }
+        );
+    }
+});
+
+socket.on('rematch', function() {
+    moveCount = 1;
+    turnCount = 0;    
+    $pgn.empty();   
+    game.reset();  
+    board.position('start');
+    colorWhoRequestedRematch = '';
+    $rematchBtn.css('display', 'none');
+    $status.html(`Rematch! White to move`);
+});
 
 $('#resignBtn').on('click', handleResign);
 $('#resignBtnMob').on('click', handleResign);
@@ -282,3 +362,5 @@ $('#resignBtnMob').on('click', handleResign);
 
 $('#drawBtn').on('click', handleDraw); 
 $('#drawBtnMob').on('click', handleDraw);
+
+$rematchBtn.on('click', handleRematch);

@@ -21,6 +21,24 @@ const myIo = (io) => {
             io.to(currentCode).emit('startGame');
         });
 
+        socket.on('rematchRequest', function() {
+            if (currentCode) {
+                io.to(currentCode).emit('rematchRequest');
+            }
+        });
+
+        socket.on('rematchReject', function() {
+            if (currentCode) {
+                io.to(currentCode).emit('rematchReject');
+            }
+        });
+
+        socket.on('rematch', function() {
+            if (currentCode) {
+                io.to(currentCode).emit('rematch');
+            }
+        });
+
         socket.on('drawRequest', function() {
             if (currentCode) {
                 io.to(currentCode).emit('drawRequest');
