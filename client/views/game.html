@@ -8,11 +8,11 @@
         <script src="../public/js/chessboard-1.0.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-        <link rel="stylesheet" href="../public/css/chessboard-1.0.0.min.css">
-        <link rel="stylesheet" href="../public/css/style.css">
         <link href="https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap" rel="stylesheet"> 
+        <link rel="stylesheet" href="../public/css/chessboard-1.0.0.min.css">
+        <link rel="stylesheet" href="../public/css/output.css">  
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
-        <link rel="icon" type="image/svg+xml" href="../public/img/icons/newLogo.png"/>
+        <link rel="icon" type="image/svg+xml" href="../public/img/icons/favicon.png"/>
         <title>Chess Chatter - Game</title>
     </head>
     <body>
@@ -20,7 +20,7 @@
             <div class="game-content">               
                 <div class="left-container">
                     <div class="moves-container">
-                        <p id="status"></p> <hr>                     
+                        <p id="status"></p> <hr id="statusHr">                     
                         <div class="scrollable">
                             <div id="pgn-container"></div>                                                                                                                                                                                                                                                              
                         </div>
@@ -43,6 +43,7 @@
                     <div class="btn-container-mobile">
                         <button id="resignBtnMob">Resign</button>
                         <button id="drawBtnMob">Draw</button>
+                        <button id="rematchBtnMob">Rematch</button>
                     </div>
                 </div>
             </div>

@@ -13,12 +13,25 @@ var $drawSound = $('#drawSound');
 var $rizzSound = $('#rizzSound');
 var $fartSound = $('#fartSound');
 var $rematchBtn = $('#rematchBtn');
+var $rematchBtnMob = $('#rematchBtnMob');
 let gameOver = false;
+let playerResigned = false;
+let playersDrawed = false;
 let moveCount = 1;
 let turnCount = 0;
 let colorWhoResigned = '';
 let colorWhoRequestedDraw = '';
 let colorWhoRequestedRematch = '';
+
+$('#resignBtn').on('click', handleResign);
+$('#resignBtnMob').on('click', handleResign);
+    
+
+$('#drawBtn').on('click', handleDraw); 
+$('#drawBtnMob').on('click', handleDraw);
+
+$rematchBtn.on('click', handleRematch);
+$rematchBtnMob.on('click', handleRematch);
 
 function onDragStart (source, piece, position, orientation) {
     // do not pick up pieces if the game is over
@@ -103,6 +116,10 @@ function updateStatus () {
     }
 
     else if (gameOver) {
+        status = 'Opponent disconnected';
+    }
+
+    else if (gameOver && !playerResigned && !playersDrawed) {
         status = 'Opponent disconnected, you win!';
     }
 
@@ -112,7 +129,9 @@ function updateStatus () {
 
     // game still on
     else {
-        status = moveColor + ' to move';
+        if (gameHasStarted) {
+            status = moveColor + ' to move';
+        }
 
         // check?
         if (game.in_check()) {
@@ -169,6 +188,7 @@ if (urlParams.get('code')) {
 
 socket.on('startGame', function() {
     $rematchBtn.css('display', 'none');
+    $rematchBtnMob.css('display', 'none');
     gameHasStarted = true;
     updateStatus();
 });
@@ -229,9 +249,14 @@ socket.on('drawReject', function() {
 socket.on('draw', function() {
     $status.html(`Draw!`);
     $statusMob.html(`Draw!`);
-    gameOver = true;
+
     $rematchBtn.css('display', 'block');
+    $rematchBtnMob.css('display', 'block');
+
+    gameOver = true;
     $drawSound.get(0).play();
+
+    playersDrawed = true;
 });
 
 socket.on('resign', function() {
@@ -246,13 +271,17 @@ socket.on('resign', function() {
         $fartSound.get(0).play();
     } 
     colorWhoResigned = '';
+
     gameOver = true;
+    playerResigned = true;
+
     $rematchBtn.css('display', 'block');
+    $rematchBtnMob.css('display', 'block');
 });
 
 
 function handleResign() {
-    if (gameHasStarted && !gameOver){
+    if (gameHasStarted && !gameOver) {
         colorWhoResigned = playerColor;
         socket.emit('resign');
     } 
@@ -357,17 +386,13 @@ socket.on('rematch', function() {
     $status.html(`Rematch! White to move`);
     $statusMob.html(`Rematch! White to move`);
 
+    $rematchBtn.css('display', 'none');
+    $rematchBtnMob.css('display', 'none');
+
+    playerResigned = false;
+    playersDrawed = false;
+
     gameOver = false;
     game.reset();  
-    board.position('start');   
-    $rematchBtn.css('display', 'none');
+    board.position('start');     
 });
-
-$('#resignBtn').on('click', handleResign);
-$('#resignBtnMob').on('click', handleResign);
-    
-
-$('#drawBtn').on('click', handleDraw); 
-$('#drawBtnMob').on('click', handleDraw);
-
-$rematchBtn.on('click', handleRematch);
