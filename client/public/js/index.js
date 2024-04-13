@@ -12,6 +12,7 @@ var $checkMateSound = $('#checkMateSound');
 var $drawSound = $('#drawSound');
 var $rizzSound = $('#rizzSound');
 var $fartSound = $('#fartSound');
+var $rematchBtn = $('#rematchBtn');
 let gameOver = false;
 let moveCount = 1;
 let turnCount = 0;

@@ -31,6 +31,7 @@ body{
     border: 6px black solid;
     display: flex; 
     overflow: hidden; 
+    height: 85vh;
 }
 
 .left-container{
@@ -93,7 +94,6 @@ body{
     transition: 0.3s;
 }
 
-
 .moves-container #pgn-container div:nth-child(even) {
     background-color: #f8dcb4; 
 }
@@ -128,10 +128,6 @@ body{
     border-radius: 100vw;              
 }
 
-.pgn-mobile-container{
-    display: none;
-}
-
 #pgn-mobile{
     display: block;
     background-color: hsla(0, 2%, 19%, 0.821);
@@ -143,13 +139,16 @@ body{
     user-select: none;
 }
 
-.btn-container-mobile, #statusMob{
+.btn-container-mobile,
+.pgn-mobile-container,
+.hrMob,
+#statusMob,
+#pgn-mobile-hr,
+#rematchBtn
+{
     display: none;
 }
 
-.hrMob{
-    display: none;
-}
 
 @media screen and (max-width: 480px) {
     .left-container{
@@ -157,11 +156,18 @@ body{
     }
 
     .game-content{
-        margin-top: 20%;
+        margin-top: 15%;
+        height: auto;
     }
 
     .pgn-mobile-container{
         display: block;
+        background-color: black;
+    }
+
+    #pgn-mobile-hr{
+        margin-bottom: 0%;
+        margin-top: 0%;
     }
     
     #myBoard{
@@ -169,7 +175,7 @@ body{
     }
 
     #pgn-mobile::-webkit-scrollbar {
-        height: 4px;
+        height: 3px;
     }
     
     #pgn-mobile::-webkit-scrollbar-track {
