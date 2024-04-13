@@ -346,14 +346,21 @@ socket.on('rematchReject', function(){
 });
 
 socket.on('rematch', function() {
-    moveCount = 1;
-    turnCount = 0;    
-    $pgn.empty();   
-    game.reset();  
-    board.position('start');
     colorWhoRequestedRematch = '';
-    $rematchBtn.css('display', 'none');
+
+    moveCount = 1;
+    turnCount = 0; 
+
+    $pgn.empty(); 
+    $pgnMobile.empty(); 
+
     $status.html(`Rematch! White to move`);
+    $statusMob.html(`Rematch! White to move`);
+
+    gameOver = false;
+    game.reset();  
+    board.position('start');   
+    $rematchBtn.css('display', 'none');
 });
 
 $('#resignBtn').on('click', handleResign);
