@@ -208,7 +208,3 @@ body{
         display: block;
     }
 }
-
-@media screen and (max-width: 780px) {
-    /* handle later */
-}
