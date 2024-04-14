@@ -22,55 +22,52 @@ const myIo = (io) => {
         });
 
         socket.on('rematchRequest', function() {
-            if (currentCode) {
-                io.to(currentCode).emit('rematchRequest');
-            }
+            emitSocket(currentCode, 'rematchRequest');
         });
 
         socket.on('rematchReject', function() {
-            if (currentCode) {
-                io.to(currentCode).emit('rematchReject');
-            }
+            emitSocket(currentCode, 'rematchReject');
         });
 
         socket.on('rematch', function() {
-            if (currentCode) {
-                io.to(currentCode).emit('rematch');
-            }
+            emitSocket(currentCode, 'rematch');
         });
 
         socket.on('drawRequest', function() {
-            if (currentCode) {
-                io.to(currentCode).emit('drawRequest');
-            }
+            emitSocket(currentCode, 'drawRequest');
         });
 
         socket.on('drawReject', function() {
-            if (currentCode) {
-                io.to(currentCode).emit('drawReject');
-            }
+            emitSocket(currentCode, 'drawReject');
         });
 
         socket.on('draw', function() {
-            if (currentCode) {
-                io.to(currentCode).emit('draw');
-                delete games[currentCode];
-            }
+            emitSocketAndDelete(currentCode, 'draw');
         });
 
         socket.on('resign', function() {
-            if (currentCode) {
-                io.to(currentCode).emit('resign');
-                delete games[currentCode];
-            }
+            emitSocketAndDelete(currentCode, 'resign');
         });
 
         socket.on('disconnect', function() {
-            if (currentCode) {
+            if (currentCode){
                 io.to(currentCode).emit('gameOverDisconnect');
                 delete games[currentCode];
             }
         });
+
+        const emitSocket = (currentCode, socket) => {
+            if (currentCode){
+                io.to(currentCode).emit(socket);
+            }
+        }
+
+        const emitSocketAndDelete = (currentCode, socket) => {
+            if (currentCode){
+                io.to(currentCode).emit(socket);
+                delete games[currentCode];
+            }
+        }
     });   
 };
 

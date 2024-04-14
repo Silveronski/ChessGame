@@ -15,8 +15,6 @@ var $fartSound = $('#fartSound');
 var $rematchBtn = $('#rematchBtn');
 var $rematchBtnMob = $('#rematchBtnMob');
 let gameOver = false;
-let playerResigned = false;
-let playersDrawed = false;
 let moveCount = 1;
 let turnCount = 0;
 let colorWhoResigned = '';
@@ -26,7 +24,6 @@ let colorWhoRequestedRematch = '';
 $('#resignBtn').on('click', handleResign);
 $('#resignBtnMob').on('click', handleResign);
     
-
 $('#drawBtn').on('click', handleDraw); 
 $('#drawBtnMob').on('click', handleDraw);
 
@@ -117,10 +114,6 @@ function updateStatus () {
 
     else if (gameOver) {
         status = 'Opponent disconnected';
-    }
-
-    else if (gameOver && !playerResigned && !playersDrawed) {
-        status = 'Opponent disconnected, you win!';
     }
 
     else if (!gameHasStarted) {
@@ -255,8 +248,6 @@ socket.on('draw', function() {
 
     gameOver = true;
     $drawSound.get(0).play();
-
-    playersDrawed = true;
 });
 
 socket.on('resign', function() {
@@ -273,7 +264,6 @@ socket.on('resign', function() {
     colorWhoResigned = '';
 
     gameOver = true;
-    playerResigned = true;
 
     $rematchBtn.css('display', 'block');
     $rematchBtnMob.css('display', 'block');
@@ -388,9 +378,6 @@ socket.on('rematch', function() {
 
     $rematchBtn.css('display', 'none');
     $rematchBtnMob.css('display', 'none');
-
-    playerResigned = false;
-    playersDrawed = false;
 
     gameOver = false;
     game.reset();  
