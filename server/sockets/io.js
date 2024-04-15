@@ -1,8 +1,18 @@
 import { games } from '../server.js';
 
+const actions = [
+    'rematchRequest',
+    'rematchReject',
+    'rematch',
+    'drawRequest',
+    'drawReject',
+    'draw',
+    'resign'
+];
+
 const myIo = (io) => {
     io.on('connection', socket => {
-
+        
         console.log('New socket connection');
         let currentCode = null;
 
@@ -21,34 +31,6 @@ const myIo = (io) => {
             io.to(currentCode).emit('startGame');
         });
 
-        socket.on('rematchRequest', function() {
-            emitSocket(currentCode, 'rematchRequest');
-        });
-
-        socket.on('rematchReject', function() {
-            emitSocket(currentCode, 'rematchReject');
-        });
-
-        socket.on('rematch', function() {
-            emitSocket(currentCode, 'rematch');
-        });
-
-        socket.on('drawRequest', function() {
-            emitSocket(currentCode, 'drawRequest');
-        });
-
-        socket.on('drawReject', function() {
-            emitSocket(currentCode, 'drawReject');
-        });
-
-        socket.on('draw', function() {
-            emitSocketAndDelete(currentCode, 'draw');
-        });
-
-        socket.on('resign', function() {
-            emitSocketAndDelete(currentCode, 'resign');
-        });
-
         socket.on('disconnect', function() {
             if (currentCode){
                 io.to(currentCode).emit('gameOverDisconnect');
@@ -56,6 +38,19 @@ const myIo = (io) => {
             }
         });
 
+        actions.forEach((action) => {
+            if (action === 'draw' || action === 'resign') {            
+                socket.on(action, () => {
+                    emitSocketAndDelete(currentCode, action);
+                });
+            }
+            else {
+                socket.on(action, () => {
+                    emitSocket(currentCode, action);
+                });
+            }
+        });
+        
         const emitSocket = (currentCode, socket) => {
             if (currentCode){
                 io.to(currentCode).emit(socket);
