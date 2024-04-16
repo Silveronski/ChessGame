@@ -4,6 +4,8 @@ let socket = io();
 var game = new Chess();
 var $status = $('#status');
 var $statusMob = $('#statusMob');
+var $evaluation = $('.evaluation');
+var $evaluationMob = $('.evaluationMob');
 var $pgn = $('#pgn-container');
 var $pgnMobile = $('#pgn-mobile');
 var $bruhSound = $('#bruhSound');
@@ -62,15 +64,82 @@ function onDrop (source, target) {
 
     socket.emit('move', theMove);
     updateStatus();       
+    updateEvaluation(); 
+}
+
+function countCapturedPieces() {
+    const piecesOnTheBoard = {
+        white: { p: 0, n: 0, b: 0, r: 0, q: 0 },
+        black: { p: 0, n: 0, b: 0, r: 0, q: 0 }
+    };
+
+    let whiteSumOfPieces = 0;
+    let blackSumOfPieces = 0;
+
+    const board = game.board();
+    board.flat().forEach(piece => {
+        if (piece !== null) {
+            const color = piece.color === 'w' ? 'white' : 'black';
+            const type = piece.type;
+
+            if (type === 'p') {
+                piecesOnTheBoard[color][type]++;
+                color === 'white' ? whiteSumOfPieces++ : blackSumOfPieces++;
+            }
+            else if (type === 'n' || type === 'b') {
+                piecesOnTheBoard[color][type] += 3;
+                color === 'white' ? whiteSumOfPieces += 3 : blackSumOfPieces += 3;
+            }
+            else if (type === 'r') {
+                piecesOnTheBoard[color][type] += 5;
+                color === 'white' ? whiteSumOfPieces += 5 : blackSumOfPieces += 5;
+            }
+            else if (type === 'q') {
+                piecesOnTheBoard[color][type] += 9;
+                color === 'white' ? whiteSumOfPieces += 9 : blackSumOfPieces += 9;
+            }
+        }
+    });
+
+    return {whiteSumOfPieces, blackSumOfPieces};
+}
+
+function updateEvaluation() {
+    const {whiteSumOfPieces, blackSumOfPieces} = countCapturedPieces(); 
+    if (whiteSumOfPieces > blackSumOfPieces) {
+        const difference = whiteSumOfPieces - blackSumOfPieces;
+        $evaluation.html(`White is leading by ${difference} material ${difference > 1 ? 'points' : 'point'}`);
+        $evaluation.css('color', '#f8dcb4');
+
+        $evaluationMob.html(`White is leading by ${difference} material ${difference > 1 ? 'points' : 'point'}`);
+        $evaluationMob.css('color', '#f8dcb4');
+    }
+    else if (blackSumOfPieces > whiteSumOfPieces) {
+        const difference = blackSumOfPieces - whiteSumOfPieces;
+        $evaluation.html(`Black is leading by ${difference} material ${difference > 1 ? 'points' : 'point'}`);
+        $evaluation.css('color', '#b88c64');
+
+        $evaluationMob.html(`Black is leading by ${difference} material ${difference > 1 ? 'points' : 'point'}`);
+        $evaluationMob.css('color', '#b88c64');
+    }
+    else{
+        $evaluation.html(`Equal Material`);
+        $evaluation.css('color', 'white');
+
+        $evaluationMob.html(`Equal Material`);
+        $evaluationMob.css('color', 'white');
+    }
 }
 
 // this gets called when the oponent makes a move
 socket.on('newMove', function(move) {
     game.move(move);
     board.position(game.fen());
+    countCapturedPieces();
     updateStatus();
     playGameSounds(game);
     updatePgn();
+    updateEvaluation();   
 });
 
 function playGameSounds(game){
@@ -148,9 +217,11 @@ function updatePgn() {
                 let moveDiv = document.querySelector(`.move${moveCount}`);
                 moveDiv.innerHTML =`${moveCount}. ` +  game.pgn().split('.')[moveCount];
                 moveCount++;
+                moveDiv.scrollIntoView({behavior: 'smooth'});
             }
             else {
-                $pgn.append('<div class="move' + moveCount + '">'+ moveCount + ". " + game.pgn().split('.')[moveCount] + '</div>');                                                                                                                 
+                $pgn.append('<div class="move' + moveCount + '">'+ moveCount + ". " + game.pgn().split('.')[moveCount] + '</div>');  
+                document.querySelector(`.move${moveCount}`).scrollIntoView({behavior: 'smooth'});                                                                                                               
             }            
         }                     
     }
@@ -378,6 +449,12 @@ socket.on('rematch', function() {
 
     $rematchBtn.css('display', 'none');
     $rematchBtnMob.css('display', 'none');
+
+    $evaluation.html(`Equal Material`);
+    $evaluation.css('color', 'white');
+
+    $evaluationMob.html(`Equal Material`);
+    $evaluationMob.css('color', 'white');
 
     gameOver = false;
     game.reset();  

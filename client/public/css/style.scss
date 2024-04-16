@@ -36,6 +36,7 @@ body{
             }
 
             .moves-container{
+                position: relative;
                 height: calc(100% - 60px);
                 width: 400px;   
                 padding-right: 0.5%;
@@ -60,7 +61,14 @@ body{
                     font-size: 35px;
                     color: white;
                     margin-top: 2%;
-                    margin-bottom: 4%;
+                    margin-bottom: 0%;
+                }
+
+                .evaluation{   
+                    margin-top: 1.8%;             
+                    color: white;
+                    text-align: center;
+                    transition: 0.5;                                         
                 }
                 
                 #statusHr{
@@ -69,8 +77,26 @@ body{
                 }
 
                 .scrollable{
-                    height: 685px;
+                    position: absolute;
+                    top: 95px;
+                    left: 0;
+                    right: 0;
+                    bottom: 0; 
                     overflow-y: auto;
+
+                    &::-webkit-scrollbar {
+                        width: 8px;
+                    }
+                    
+                    &::-webkit-scrollbar-track {
+                        background: rgb(57, 57, 57);
+                        border-radius: 100vw;
+                    }
+                    
+                    &::-webkit-scrollbar-thumb {
+                        background-color: white;
+                        border-radius: 100vw;
+                    }                                      
 
                     #pgn-container div{
                         margin-top: 0.5vw;
@@ -100,8 +126,7 @@ body{
                 display: flex;
                 flex-direction: row;
                 justify-content: space-evenly;
-                background-color: rgb(34, 32, 32);
-                border-top: 3px white solid;
+                background-color: rgb(34, 32, 32);               
 
                 button{
                     font-family: "Tilt Warp";
@@ -117,6 +142,10 @@ body{
                     &:hover{
                         background-color: aliceblue;
                     }   
+                }
+
+                #rematchBtn{
+                    display: none;
                 }
             }
         }
@@ -137,6 +166,7 @@ body{
             }
            
             .pgn-mobile-container{
+                display: none;
                 @include mobile{
                     display: block;
                     background-color: black;
@@ -167,7 +197,13 @@ body{
                     }                      
                 }
             }
-
+            #pgn-mobile-hr,
+            #statusMob,
+            .evaluationMob,
+            .hrMob,
+            .btn-container-mobile{
+                display: none;
+            } 
             @include mobile{
                 #pgn-mobile-hr{
                     margin-bottom: 0%;
@@ -179,6 +215,16 @@ body{
                     color: white;
                     text-align: center;
                     margin-top: 2%;
+                    margin-bottom: 0%;
+                }
+
+                .evaluationMob{
+                    display: block;
+                    font-size: 12px;
+                    color: white;
+                    text-align: center;
+                    margin-bottom: 0%;
+                    margin-top: 1.8%;
                 }
             
                 .hrMob{

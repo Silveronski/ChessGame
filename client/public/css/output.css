@@ -5,15 +5,6 @@ body {
   font-family: "Tilt Warp";
 }
 
-.btn-container-mobile,
-.pgn-mobile-container,
-.hrMob,
-#statusMob,
-#pgn-mobile-hr,
-#rematchBtn {
-  display: none;
-}
-
 .game-container {
   margin-top: 5%;
   display: flex;
@@ -41,6 +32,7 @@ body {
   }
 }
 .game-container .game-content .left-container .moves-container {
+  position: relative;
   height: calc(100% - 60px);
   width: 400px;
   padding-right: 0.5%;
@@ -62,15 +54,36 @@ body {
   font-size: 35px;
   color: white;
   margin-top: 2%;
-  margin-bottom: 4%;
+  margin-bottom: 0%;
+}
+.game-container .game-content .left-container .moves-container .evaluation {
+  margin-top: 1.8%;
+  color: white;
+  text-align: center;
+  transition: 0.5;
 }
 .game-container .game-content .left-container .moves-container #statusHr {
   width: 110%;
   margin-right: 2px;
 }
 .game-container .game-content .left-container .moves-container .scrollable {
-  height: 685px;
+  position: absolute;
+  top: 95px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow-y: auto;
+}
+.game-container .game-content .left-container .moves-container .scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+.game-container .game-content .left-container .moves-container .scrollable::-webkit-scrollbar-track {
+  background: rgb(57, 57, 57);
+  border-radius: 100vw;
+}
+.game-container .game-content .left-container .moves-container .scrollable::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-radius: 100vw;
 }
 .game-container .game-content .left-container .moves-container .scrollable #pgn-container div {
   margin-top: 0.5vw;
@@ -95,7 +108,6 @@ body {
   flex-direction: row;
   justify-content: space-evenly;
   background-color: rgb(34, 32, 32);
-  border-top: 3px white solid;
 }
 .game-container .game-content .left-container .btn-container button {
   font-family: "Tilt Warp";
@@ -111,6 +123,9 @@ body {
 .game-container .game-content .left-container .btn-container button:hover {
   background-color: aliceblue;
 }
+.game-container .game-content .left-container .btn-container #rematchBtn {
+  display: none;
+}
 .game-container .game-content .board-container {
   flex: 1;
   position: relative;
@@ -123,6 +138,9 @@ body {
   .game-container .game-content .board-container #myBoard {
     width: 325px;
   }
+}
+.game-container .game-content .board-container .pgn-mobile-container {
+  display: none;
 }
 @media screen and (max-width: 480px) {
   .game-container .game-content .board-container .pgn-mobile-container {
@@ -151,6 +169,13 @@ body {
   background-color: white;
   border-radius: 100vw;
 }
+.game-container .game-content .board-container #pgn-mobile-hr,
+.game-container .game-content .board-container #statusMob,
+.game-container .game-content .board-container .evaluationMob,
+.game-container .game-content .board-container .hrMob,
+.game-container .game-content .board-container .btn-container-mobile {
+  display: none;
+}
 @media screen and (max-width: 480px) {
   .game-container .game-content .board-container #pgn-mobile-hr {
     margin-bottom: 0%;
@@ -161,6 +186,15 @@ body {
     color: white;
     text-align: center;
     margin-top: 2%;
+    margin-bottom: 0%;
+  }
+  .game-container .game-content .board-container .evaluationMob {
+    display: block;
+    font-size: 12px;
+    color: white;
+    text-align: center;
+    margin-bottom: 0%;
+    margin-top: 1.8%;
   }
   .game-container .game-content .board-container .hrMob {
     display: block;

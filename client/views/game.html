@@ -16,13 +16,15 @@
         <title>Chess Chatter - Game</title>
     </head>
     <body>
-        <div class="game-container">
+        <main class="game-container">
             <div class="game-content">               
                 <div class="left-container">
                     <div class="moves-container">
-                        <p id="status"></p> <hr id="statusHr">                     
+                        <p id="status"></p>                 
+                        <p class="evaluation">Equal Material</p>                
+                        <hr id="statusHr">  
                         <div class="scrollable">
-                            <div id="pgn-container"></div>                                                                                                                                                                                                                                                              
+                            <div id="pgn-container"></div>                                                                                                                                                                                                                                                                                                                       
                         </div>
                     </div>
                     <div class="btn-container">
@@ -39,6 +41,7 @@
                     <hr id="pgn-mobile-hr">
                     <div id="myBoard"></div>
                     <div id="statusMob">lolololol</div>
+                    <p class="evaluationMob">Equal Material</p>
                     <hr class="hrMob">
                     <div class="btn-container-mobile">
                         <button id="resignBtnMob">Resign</button>
@@ -47,7 +50,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
 
         <audio id="bruhSound" src="../public/audio/bruh.mp3"></audio>
         <audio id="checkSound" src="../public/audio/check.mp3"></audio>
