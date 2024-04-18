@@ -370,7 +370,7 @@ function handleDraw() {
 }
 
 function handleRematch() {
-    if (gameOver) {
+    if (gameOver || game.in_checkmate() || game.in_draw()) {
         colorWhoRequestedRematch = playerColor;
         socket.emit('rematchRequest');
 
