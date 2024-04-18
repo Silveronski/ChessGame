@@ -171,14 +171,16 @@ function updateStatus () {
         moveColor = 'Black';
     }
 
-    // checkmate?
     if (game.in_checkmate()) {
         status = 'Game over, ' + moveColor + ' is in checkmate.';
+        $rematchBtn.css('display', 'block');
+        $rematchBtnMob.css('display', 'block');
     }
 
-    // draw?
     else if (game.in_draw()) {
         status = 'Game over, drawn position';
+        $rematchBtn.css('display', 'block');
+        $rematchBtnMob.css('display', 'block');
     }
 
     else if (gameOver) {
@@ -195,7 +197,6 @@ function updateStatus () {
             status = moveColor + ' to move';
         }
 
-        // check?
         if (game.in_check()) {
             status += ', ' + moveColor + ' is in check';
         }         
@@ -342,14 +343,14 @@ socket.on('resign', function() {
 
 
 function handleResign() {
-    if (gameHasStarted && !gameOver) {
+    if (gameHasStarted && !gameOver && !game.in_checkmate()) {
         colorWhoResigned = playerColor;
         socket.emit('resign');
     } 
 }
 
 function handleDraw() {
-    if (gameHasStarted && !gameOver) {
+    if (gameHasStarted && !gameOver && !game.in_checkmate()) {
         colorWhoRequestedDraw = playerColor;
         socket.emit('drawRequest');
 
